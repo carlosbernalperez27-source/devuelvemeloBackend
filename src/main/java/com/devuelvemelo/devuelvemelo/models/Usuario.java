@@ -19,13 +19,14 @@ public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Id llave primaria autogenerada
-    @Column(unique = true) // Evita que se registren dos usuarios con el mismo email
     private Long id;
+    @Column(unique = true, nullable = false) // Evita que se registren dos usuarios con el mismo rut
     private String rut;
     private String nombre;
-    private String apellido;
+    private String apellidos;
     private String codPais;
     private Integer telefonoCelular;
+    @Column(unique = true, nullable = false) // Evita que se registren dos usuarios con el mismo correo
     private String email;
     private String password;
 }
