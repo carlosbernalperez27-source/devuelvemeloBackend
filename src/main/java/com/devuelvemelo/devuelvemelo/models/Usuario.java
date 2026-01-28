@@ -1,32 +1,52 @@
 package com.devuelvemelo.devuelvemelo.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import jakarta.persistence.Column;
 
-@Entity //Tabla en la base de datos
+@Entity
 @Table(name = "usuarios")
-@Data // Crea los Getters, Setters, equals, canEqual, hashCode y toString automáticamente
-@NoArgsConstructor // Crea el constructor vacío 
-@AllArgsConstructor // Crea un constructor con todos los atributos
+@Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Usuario {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Id llave primaria autogenerada
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(unique = true, nullable = false) // Evita que se registren dos usuarios con el mismo rut
+
+    @Column(unique = true, nullable = false)
+    @NotNull(message = "El RUT es obligatorio")
     private String rut;
+
+    @NotNull(message = "El nombre es obligatorio")
+    @Size(max = 50, message = "El nombre no puede tener más de 50 caracteres")
     private String nombre;
+
+    @NotNull(message = "Los apellidos son obligatorios")
+    @Size(max = 50, message = "Los apellidos no pueden tener más de 50 caracteres")
     private String apellidos;
+
     private String codPais;
+    
+    @NotNull(message = "El teléfono celular es obligatorio")
+    @Size(min = 8, max = 15, message = "El teléfono celular debe tener entre 8 y 15 dígitos")
     private Integer telefonoCelular;
-    @Column(unique = true, nullable = false) // Evita que se registren dos usuarios con el mismo correo
-    private String email;
+
+    @Column(unique = true, nullable = false)
+    @NotNull(message = "El email es obligatorio")
+    @Email(message = "El formato del email no es válido")
+    @Size(max = 50)
+    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", message = "El email debe tener un formato válido")
+    private String emailUsuario;
+
+    @NotNull(message = "La contraseña es obligatoria")
+    @Size(min = 8, max = 20, message = "La contraseña debe tener entre 8 y 20 caracteres") // Aumentado a 20 por seguridad
+    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$", 
+             message = "La contraseña debe contener al menos un número, una letra mayúscula, una minúscula y un carácter especial")
     private String password;
 }
