@@ -49,4 +49,7 @@ public class Usuario {
     @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$", 
              message = "La contraseña debe contener al menos un número, una letra mayúscula, una minúscula y un carácter especial")
     private String password;
+
+    // Este campo guardará el nombre o link de la foto (opcional)
+    private String imagenUrl;
 }
