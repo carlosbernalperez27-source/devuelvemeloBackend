@@ -1,4 +1,4 @@
-package com.devuelvemelo.devuelvemelo.models;
+package com.devuelvemelo.devuelvemelo.models.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;

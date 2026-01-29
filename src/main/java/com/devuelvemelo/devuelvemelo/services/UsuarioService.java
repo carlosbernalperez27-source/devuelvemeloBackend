@@ -1,10 +1,14 @@
 package com.devuelvemelo.devuelvemelo.services;
 
-import com.devuelvemelo.devuelvemelo.models.Usuario;
-import com.devuelvemelo.devuelvemelo.repositories.UsuarioRepository;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.List;
+import jakarta.transaction.Transactional;
+
+import com.devuelvemelo.devuelvemelo.models.entity.Usuario;
+import com.devuelvemelo.devuelvemelo.repositories.UsuarioRepository;
 
 @Service
 public class UsuarioService {
@@ -12,12 +16,56 @@ public class UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Transactional
+    public String crearUsuario(Usuario usuario) {
+        try {
+            // 1. Validación de objeto nulo
+            if (usuario == null) return "Error: Datos de usuario no proporcionados";
+
+            // 2. Validaciones de lógica de negocio (El RUT es vital en Devuélvemelo)
+            if (usuarioRepository.findByRut(usuario.getRut()).isPresent()) {
+                return "Error: El RUT ya se encuentra registrado";
+            }
+
+            if (usuarioRepository.findByEmailUsuario(usuario.getEmailUsuario()).isPresent()) {
+                return "Error: El email ya está en uso";
+            }
+
+            // 3. Guardar directamente (Ya que 'Usuario' es tu entidad)
+            usuarioRepository.save(usuario);
+            return "Usuario registrado exitosamente en Devuélvemelo";
+
+        } catch (Exception e) {
+            return "Error interno: " + e.getMessage();
+        }
+    }
+
     public List<Usuario> obtenerTodos() {
         return usuarioRepository.findAll();
     }
 
-    public Usuario guardarUsuario(Usuario usuario) {
-        // Validar si el RUT ya existe antes de guardar
-        return usuarioRepository.save(usuario);
+    public Usuario obtenerPorRut(String rut) {
+        return usuarioRepository.findByRut(rut).orElse(null);
+    }
+
+    @Transactional
+    public String actualizarUsuario(String rut, Usuario datosNuevos) {
+        return usuarioRepository.findByRut(rut).map(existente -> {
+            existente.setNombre(datosNuevos.getNombre());
+            existente.setApellidos(datosNuevos.getApellidos());
+            existente.setTelefonoCelular(datosNuevos.getTelefonoCelular());
+            existente.setEmailUsuario(datosNuevos.getEmailUsuario());
+            existente.setPassword(datosNuevos.getPassword());
+            usuarioRepository.save(existente);
+            return "Datos actualizados correctamente";
+        }).orElse("Usuario no encontrado con el RUT: " + rut);
+    }
+
+    @Transactional
+    public String eliminarUsuario(String rut) {
+        return usuarioRepository.findByRut(rut).map(u -> {
+            usuarioRepository.delete(u);
+            return "Usuario eliminado del sistema";
+        }).orElse("No se pudo eliminar: Usuario no encontrado");
     }
 }
