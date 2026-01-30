@@ -8,13 +8,17 @@ import java.util.Optional;
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     
-    // Método para buscar por RUT 
     Optional<Usuario> findByRut(String rut);
     
-    // Método para buscar por email
-    Optional<Usuario> findByEmailUsuario(String emailUsuario);
+    // Cambiado de findByEmailUsuario a findByEmail
+    Optional<Usuario> findByEmail(String email);
 
-    Optional<Usuario> findByRutAndEmailUsuario(String rut, String emailUsuario);
+    // Cambiado de findByRutAndEmailUsuario a findByRutAndEmail
+    Optional<Usuario> findByRutAndEmail(String rut, String email);
 
-   
+    boolean existsByRut(String rut);
+    
+    boolean existsByEmail(String email);
 }
+   
+

@@ -1,9 +1,12 @@
 package com.devuelvemelo.devuelvemelo.services;
 
-import java.io.IOException;
+import java.util.UUID;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.Files;
+import java.io.IOException;
+
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,7 +34,7 @@ public class UsuarioService {
                 return "Error: El RUT ya se encuentra registrado";
             }
 
-            if (usuarioRepository.findByEmailUsuario(usuario.getEmailUsuario()).isPresent()) {
+            if (usuarioRepository.findByEmail(usuario.getEmail()).isPresent()) {
                 return "Error: El email ya está en uso";
             }
 
@@ -58,7 +61,7 @@ public class UsuarioService {
             existente.setNombre(datosNuevos.getNombre());
             existente.setApellidos(datosNuevos.getApellidos());
             existente.setTelefonoCelular(datosNuevos.getTelefonoCelular());
-            existente.setEmailUsuario(datosNuevos.getEmailUsuario());
+            existente.setEmail(datosNuevos.getEmail());
             existente.setPassword(datosNuevos.getPassword());
             usuarioRepository.save(existente);
             return "Datos actualizados correctamente";

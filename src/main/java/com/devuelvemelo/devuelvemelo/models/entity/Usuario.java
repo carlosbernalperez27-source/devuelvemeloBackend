@@ -42,7 +42,7 @@ public class Usuario {
     @Email(message = "El formato del email no es válido")
     @Size(max = 50)
     @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", message = "El email debe tener un formato válido")
-    private String emailUsuario;
+    private String email;
 
     @NotNull(message = "La contraseña es obligatoria")
     @Size(min = 8, max = 20, message = "La contraseña debe tener entre 8 y 20 caracteres") // Aumentado a 20 por seguridad
@@ -50,6 +50,6 @@ public class Usuario {
              message = "La contraseña debe contener al menos un número, una letra mayúscula, una minúscula y un carácter especial")
     private String password;
 
-    // Este campo guardará el nombre o link de la foto (opcional)
+    // Se guardará el nombre o link de la foto
     private String imagenUrl;
 }
